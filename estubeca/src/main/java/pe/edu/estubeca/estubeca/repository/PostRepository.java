@@ -20,6 +20,8 @@ public interface PostRepository extends JpaRepository<Post,Long> {
     @Query(value="select * from posts ORDER BY id DESC;", nativeQuery = true)
     List<Post> postsDescendente();
 
+    @Query(value= "SELECT * FROM Posts p WHERE p.tags LIKE '%' || ?1 || '%' ORDER BY id DESC;", nativeQuery = true)
+    List<Post> findAllPostsByTag(String tag);
 
 }
 

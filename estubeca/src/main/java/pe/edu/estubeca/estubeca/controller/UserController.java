@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pe.edu.estubeca.estubeca.entities.Beca;
+import pe.edu.estubeca.estubeca.entities.Role;
 import pe.edu.estubeca.estubeca.entities.Post;
 import pe.edu.estubeca.estubeca.entities.User;
 import pe.edu.estubeca.estubeca.exception.ResourceNotFoundException;
@@ -86,13 +86,14 @@ public class UserController {
         List<String> cursos=cursoRepository.ListNumeroUsuarioPorCursoJPQL();
         return new ResponseEntity<List<String>>(cursos, HttpStatus.OK);
     }*/
-    @PutMapping("/users/upgrade/{id}")
-    public ResponseEntity<User> upgradeUser(
+
+    @PutMapping("/users/{id}/upgrade")
+    public ResponseEntity<User> updatePremium(
             @PathVariable("id") Long id,
-            @RequestBody User user){
+            @RequestBody Role premium){
         User userUpdate= userRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Not found post with id="+id));
-        userUpdate.setRole(user.getRole());
+        userUpdate.setRole(premium);
 
         return new ResponseEntity<User>(userRepository.save(userUpdate),
                 HttpStatus.OK);

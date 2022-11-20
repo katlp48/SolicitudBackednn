@@ -36,6 +36,11 @@ public class PostController {
 
         return new ResponseEntity<Post>(post,HttpStatus.OK);
     }
+    @GetMapping("/posts/tag/{tag}")
+    public ResponseEntity<List<Post>> getAllPostsByTag(@PathVariable("tag") String tag){
+        List<Post> posts=postRepository.findAllPostsByTag(tag);
+        return new ResponseEntity<List<Post>>(posts,HttpStatus.OK);
+    }
 
     @PostMapping("/posts")
     public ResponseEntity<Post> createPost( @RequestBody Post post){
@@ -71,7 +76,21 @@ public class PostController {
         postUpdate.setPublished(post.isPublished());
         postUpdate.setTagList(post.getTagList());
         postUpdate.setUpdatedAt(post.getUpdatedAt());
+        postUpdate.setCreatedAt(post.getCreatedAt());
         postUpdate.setFavoritesCount(post.getFavoritesCount());
+
+        return new ResponseEntity<Post>(postRepository.save(postUpdate),
+                HttpStatus.OK);
+    }
+
+    //PUT=>http:localthost:8080/api/posts/1
+    @PutMapping("/posts/{id}/favorite")
+    public ResponseEntity<Post> updatePostFavorite(
+            @PathVariable("id") Long id,
+            @RequestBody Long favoriteCount){
+        Post postUpdate= postRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Not found post with id="+id));
+        postUpdate.setFavoritesCount(favoriteCount);
 
         return new ResponseEntity<Post>(postRepository.save(postUpdate),
                 HttpStatus.OK);
