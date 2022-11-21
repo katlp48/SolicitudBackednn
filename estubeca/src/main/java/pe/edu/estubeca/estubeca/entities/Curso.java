@@ -1,8 +1,6 @@
 package pe.edu.estubeca.estubeca.entities;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name="cursos")
@@ -10,7 +8,8 @@ public class Curso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
-    /*@ManyToMany
+/*
+    @ManyToMany
     @JoinTable(name = "cursos_users",
             joinColumns = {@JoinColumn(name = "curso_id",
                     referencedColumnName = "id",nullable = false)},
@@ -18,8 +17,8 @@ public class Curso {
                     referencedColumnName = "id",nullable = false)}
     )
     private List<User> users = new ArrayList<>();*/
-    @Column(name="name")
-    private String name;
+    @Column(name="title")
+    private String title;
     @Column(name="description", length = 400, nullable = false)
     private String description;
     @Column(name="finished",nullable = false)
@@ -31,12 +30,11 @@ public class Curso {
     }
 
     public Curso(String name, String description, Boolean finished, Float cost) {
-        this.name = name;
+        this.title = name;
         this.description = description;
         this.finished = finished;
         this.cost = cost;
     }
-
     public Long getId() {
         return Id;
     }
@@ -45,12 +43,12 @@ public class Curso {
         Id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String name) {
+        this.title = name;
     }
 
     public String getDescription() {
@@ -81,7 +79,7 @@ public class Curso {
     public String toString() {
         return "Curso{" +
                 "Id=" + Id +
-                ", name='" + name + '\'' +
+                ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", finished=" + finished +
                 ", cost=" + cost +

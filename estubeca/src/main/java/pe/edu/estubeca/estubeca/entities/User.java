@@ -22,20 +22,15 @@ public class User {
 
     @Column(name="username", nullable = false)
     private String username;
-    //@ManyToMany(mappedBy = "users")
-    //private List<Curso> cursos =new ArrayList<>();
 
-    //@ManyToOne(fetch=FetchType.LAZY, optional=false)
-    //@JoinColumn(name = "role_id", nullable = false)
     @OneToOne
     private Role role;
 
 
-    public User(String email, String password, String username, /*List<Curso> cursos*/ Role role) {
+    public User(String email, String password, String username, Role role) {
         this.email = email;
         this.password = password;
         this.username = username;
-        //this.cursos = cursos;
         this.role = role;
     }
 
@@ -82,13 +77,6 @@ public class User {
         this.role = role;
     }
 
-    /*public List<Curso> getCursos() {
-        return cursos;
-    }
-
-    public void setCursos(List<Curso> cursos) {
-        this.cursos = cursos;
-    }*/
     @Override
     public String toString() {
         return "User{" +

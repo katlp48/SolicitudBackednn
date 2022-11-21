@@ -15,5 +15,4 @@ public interface CursoRepository extends JpaRepository<Curso, Long> {
     @Query(value = "SELECT c.name, COUNT(u.id) From cursos c, users u, cursos_users cu WHERE  c.id=cu.curso_id and u.id=cu.user_id Group by c.name", nativeQuery = true)
     List<String> ListNumeroUsuarioPorCursoJPQL();
 
-
 }

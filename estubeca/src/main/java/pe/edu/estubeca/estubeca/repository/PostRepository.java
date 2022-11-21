@@ -17,7 +17,7 @@ public interface PostRepository extends JpaRepository<Post,Long> {
     List<Post> findByPublished(boolean published);
     List<Post> findByTitleContaining (String title);
 
-    @Query(value="select * from posts ORDER BY id DESC;", nativeQuery = true)
+    @Query(value="SELECT * FROM public.posts ORDER BY id DESC", nativeQuery = true)
     List<Post> postsDescendente();
 
     @Query(value= "SELECT * FROM Posts p WHERE p.tags LIKE '%' || ?1 || '%' ORDER BY id DESC;", nativeQuery = true)

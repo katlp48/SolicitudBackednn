@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface  ComentarioRepository extends JpaRepository<Comentario, Long> {
 
-    @Query(value = "SELECT * FROM comentarios c inner join posts p on c.post_id = p.id WHERE p.id=?1 order by c.id DESC ", nativeQuery = true)
+    @Query(value = "SELECT c.* FROM comentarios c inner join posts p on c.post_id = p.id WHERE p.id=?1 order by c.id DESC ", nativeQuery = true)
     List<Comentario> findAllComentariosPostId(Long id);
 
     @Query("SELECT c FROM Comentario c JOIN c.post p WHERE c.post.id=?1")

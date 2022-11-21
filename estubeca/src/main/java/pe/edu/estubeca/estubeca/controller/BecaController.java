@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.*;
 import pe.edu.estubeca.estubeca.entities.Beca;
 import pe.edu.estubeca.estubeca.exception.ResourceNotFoundException;;
 import pe.edu.estubeca.estubeca.repository.BecaRepository;
+import pe.edu.estubeca.estubeca.util.BecaExcelExporter;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200")
@@ -85,5 +88,24 @@ public class BecaController {
         }
 
         return new ResponseEntity<List<Beca>>(becas, HttpStatus.OK);
+    }
+
+    @GetMapping("/becas/export/excel")
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+
+        response.setContentType("application/octet-stream");
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=result_beca";
+        response.setHeader(headerKey, headerValue);
+
+        List<Beca> becas = becaRepository.findAll();
+
+        BecaExcelExporter excelExporter = new BecaExcelExporter(
+                becas);
+
+        excelExporter.export(response);
+
+
     }
 }

@@ -98,4 +98,9 @@ public class UserController {
         return new ResponseEntity<User>(userRepository.save(userUpdate),
                 HttpStatus.OK);
     }
+    @GetMapping("/users/role-count")
+    public ResponseEntity<List<String>> findRoleCount(){
+        List<String> role= userRepository.findCantidadDeUsuariosPorRol();
+        return new ResponseEntity<List<String>>(role,HttpStatus.OK);
+    }
 }

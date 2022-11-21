@@ -29,7 +29,11 @@ public class TemaController {
                 .orElseThrow(()-> new ResourceNotFoundException("Not found tema with id=" + id));
         return new ResponseEntity<Tema>(tema, HttpStatus.OK);
     }
-
+    @GetMapping("/cursos/{id}/temas")
+    public ResponseEntity<List<Tema>> getAllTemasPostId(@PathVariable("id") Long id){
+        List<Tema> temas= temaRepository.findAllTemasCursoId(id);
+        return new ResponseEntity<List<Tema>>(temas,HttpStatus.OK);
+    }
     @PostMapping("/temas")
     public ResponseEntity<Tema> createTema(@RequestBody Tema tema){
         Tema newTema = temaRepository.save(
@@ -46,15 +50,15 @@ public class TemaController {
     @PutMapping("/temas/{id}")
     public ResponseEntity<Tema> updateTema(
             @PathVariable("id") Long id,
-            @RequestBody Curso curso){
+            @RequestBody Tema tema){
         Tema temaUpdate= temaRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Not found tema with id="+id));
-        temaUpdate.setPosition(temaUpdate.getPosition());
-        temaUpdate.setTitle(temaUpdate.getTitle());
-        temaUpdate.setDescription(temaUpdate.getDescription());
-        temaUpdate.setBody(temaUpdate.getBody());
-        temaUpdate.setVideo(temaUpdate.getVideo());
-        temaUpdate.setCurso(temaUpdate.getCurso());
+        temaUpdate.setPosition(tema.getPosition());
+        temaUpdate.setTitle(tema.getTitle());
+        temaUpdate.setDescription(tema.getDescription());
+        temaUpdate.setBody(tema.getBody());
+        temaUpdate.setVideo(tema.getVideo());
+        temaUpdate.setCurso(tema.getCurso());
         return new ResponseEntity<Tema>(temaRepository.save(temaUpdate), HttpStatus.OK);
     }
 

@@ -3,11 +3,15 @@ package pe.edu.estubeca.estubeca.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.estubeca.estubeca.entities.Curso;
 import pe.edu.estubeca.estubeca.exception.ResourceNotFoundException;
 import pe.edu.estubeca.estubeca.repository.CursoRepository;
+import pe.edu.estubeca.estubeca.util.CursoExcelExporter;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -32,7 +36,7 @@ public class CursoController {
     @PostMapping("/cursos")
     public ResponseEntity<Curso> createCurso(@RequestBody Curso curso){
         Curso newCurso = cursoRepository.save(
-                new Curso(curso.getName(),
+                new Curso(curso.getTitle(),
                         curso.getDescription(),
                         curso.getFinished(),
                         curso.getCost())
@@ -40,14 +44,14 @@ public class CursoController {
         return new ResponseEntity<Curso>(newCurso, HttpStatus.CREATED);
     }
 
-    @PutMapping("/cursos/{id}")
+       @PutMapping("/cursos/{id}")
     public ResponseEntity<Curso> updateCurso(
             @PathVariable("id") Long id,
             @RequestBody Curso curso){
         Curso cursoUpdate= cursoRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Not found cursos with id="+id));
 
-        cursoUpdate.setName(curso.getName());
+        cursoUpdate.setTitle(curso.getTitle());
         cursoUpdate.setDescription((curso.getDescription()));
         cursoUpdate.setFinished(curso.getFinished());
         cursoUpdate.setCost(curso.getCost());
@@ -70,5 +74,24 @@ public class CursoController {
     public ResponseEntity<List<String>> ListNumeroUsuariosPorCursoJPQL(){
         List<String> cursos=cursoRepository.ListNumeroUsuarioPorCursoJPQL();
         return new ResponseEntity<List<String>>(cursos, HttpStatus.OK);
+    }
+    @Transactional(readOnly = true)
+    @GetMapping("/cursos/export/excel")
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+
+        response.setContentType("application/octet-stream");
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=result_curso";
+        response.setHeader(headerKey, headerValue);
+
+        List<Curso> cursos = cursoRepository.findAll();
+
+        CursoExcelExporter excelExporter = new CursoExcelExporter(
+                cursos);
+
+        excelExporter.export(response);
+
+
     }
 }

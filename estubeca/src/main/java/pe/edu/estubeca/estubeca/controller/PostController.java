@@ -2,6 +2,7 @@ package pe.edu.estubeca.estubeca.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.estubeca.estubeca.entities.Post;
 
@@ -17,18 +18,24 @@ public class PostController {
 
     @Autowired
     private PostRepository postRepository;
+
+
     @GetMapping("/posts")
+    @Transactional
     public ResponseEntity<List<Post>> getAllPosts(){
         List<Post> posts=postRepository.findAll();
         return new ResponseEntity<List<Post>>(posts,HttpStatus.OK);
     }
+
     @GetMapping("/posts/reverse")
+    @Transactional
     public ResponseEntity<List<Post>> getPostsDescendente(){
-        List<Post> posts=postRepository.postsDescendente();
+        List<Post> posts= postRepository.postsDescendente();
         return new ResponseEntity<List<Post>>(posts,HttpStatus.OK);
     }
     //GET=>http:localthost:8080/api/posts/1
     @GetMapping("/posts/{id}")
+    @Transactional
     public ResponseEntity<Post> getPostById(@PathVariable("id") Long id){
         Post post= postRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Not found post with id="+id));
@@ -36,13 +43,16 @@ public class PostController {
 
         return new ResponseEntity<Post>(post,HttpStatus.OK);
     }
+
     @GetMapping("/posts/tag/{tag}")
+    @Transactional
     public ResponseEntity<List<Post>> getAllPostsByTag(@PathVariable("tag") String tag){
         List<Post> posts=postRepository.findAllPostsByTag(tag);
         return new ResponseEntity<List<Post>>(posts,HttpStatus.OK);
     }
 
     @PostMapping("/posts")
+    @Transactional
     public ResponseEntity<Post> createPost( @RequestBody Post post){
         Post newPost=
                 postRepository.save(
@@ -63,7 +73,9 @@ public class PostController {
     }
 
     //PUT=>http:localthost:8080/api/posts/1
+
     @PutMapping("/posts/{id}")
+    @Transactional
     public ResponseEntity<Post> updatePost(
             @PathVariable("id") Long id,
             @RequestBody Post post){
@@ -85,6 +97,7 @@ public class PostController {
 
     //PUT=>http:localthost:8080/api/posts/1
     @PutMapping("/posts/{id}/favorite")
+    @Transactional
     public ResponseEntity<Post> updatePostFavorite(
             @PathVariable("id") Long id,
             @RequestBody Long favoriteCount){
@@ -96,7 +109,9 @@ public class PostController {
                 HttpStatus.OK);
     }
 
+
     @DeleteMapping("/posts/{id}")
+    @Transactional
     public ResponseEntity<HttpStatus> deletePost(@PathVariable("id") Long id){
         postRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -104,6 +119,7 @@ public class PostController {
 
 
     @GetMapping("/post/published")
+    @Transactional
     public  ResponseEntity<List<Post>> findPostByPublished(){
         List<Post> posts=postRepository.findByPublishedSQL(true);
         if(posts.isEmpty()){

@@ -25,14 +25,21 @@ public class AvisoController {
         List<Aviso> avisos= avisoRepository.findAll();
         return new ResponseEntity<List<Aviso>>(avisos, HttpStatus.OK);
     }
+    @GetMapping("/users/{id}/avisos")
+    public ResponseEntity<List<Aviso>> getAllAvisosByUser(@PathVariable("id") Long id){
+        List<Aviso> avisos= avisoRepository.findAllAvisosByUser(id);
+        return new ResponseEntity<List<Aviso>>(avisos, HttpStatus.OK);
+    }
 
     @PostMapping("/avisos")
     public ResponseEntity<Aviso> createAviso(@RequestBody Aviso aviso){
         Aviso newAviso=
                 avisoRepository.save(
-                        new Aviso(aviso.getTitle(),
-                                aviso.getType(),
-                                aviso.getDescription())
+                        new Aviso(aviso.getType(),
+                                aviso.getTitle(),
+                                aviso.getDescription(),
+                                aviso.getCreated(),
+                                aviso.getUser())
                 );
         return new ResponseEntity<Aviso>(newAviso,HttpStatus.CREATED);
     }

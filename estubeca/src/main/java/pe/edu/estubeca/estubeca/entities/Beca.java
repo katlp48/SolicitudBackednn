@@ -20,20 +20,20 @@ public class Beca {
     @Column(name="title", length=60, nullable = false)
     private String title;
     //@Lob
-    @Column(name= "imgUrl", length =500,nullable = false)
+    @Column(name= "imgUrl", length =1000,nullable = false)
     private String imgUrl;
     //@Lob
     @Column(name="description", length =1000,nullable = false)
     private String description;
     //@Lob
-    @Column(name="requisitos", length =2000, nullable = false)
+    @Column(name="requisitos", length =4000, nullable = false)
     private String requisitos;
     @Column(name="telefono", length=20, nullable = false)
     private String telefono;
     @Column(name="urlPage", length =500, nullable = false)
     private String urlPage;
     //@Lob
-    @Column(name="beneficios",length =2000,nullable = false)
+    @Column(name="beneficios",length =4000,nullable = false)
     private String beneficios;
 
     public Beca(String title, String imgUrl, String description, String requisitos, String telefono, String urlPage, String beneficios,String tagList) {
